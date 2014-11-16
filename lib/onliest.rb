@@ -16,7 +16,7 @@ class Onliest
     new.value
   end
 
-  # Create a new
+  # Create a new unique value generator.
   # +prng+ defaults to +Random::DEFAULT+. An object that implements
   # +:rand+ returning a random integer between 0 and the value provided
   # as the first argument.
