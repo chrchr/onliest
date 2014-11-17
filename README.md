@@ -28,11 +28,24 @@ You may provide a custom random number generator as well:
 ```ruby
 
 class MyPrng
-  def self.rand(max)
-    SecureRandom.random_number(max)
+  def self.random_number(max)
+    Random::DEFAULT.rand(max)
   end
 end
 
 Onliest.new(MyPrng).value
 
 ```
+
+
+The Probability of Collison
+---------------------------
+
+If 1,000 onliest values are generated in a second, the odds of a
+collision are 1 in 281 million.
+
+Note that the timestamp part of an onliest value reoccurs
+approximately every 388 days, and collisions are possible with values
+generated in the same second and with those created in the
+corresponding second in previous revolutions of the timestamp
+sequences.

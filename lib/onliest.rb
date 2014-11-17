@@ -1,3 +1,5 @@
+require 'securerandom'
+
 # Onliest generates unique numbers for use as database keys in
 # distributed applications. The values are composed of the rightmost
 # 25 bits of a POSIX timestamp and 47 random bits.
@@ -10,18 +12,20 @@ class Onliest
   RANDOM_BITMASK = (2**RANDOM_BITS) - 1
   TIME_BITMASK = (2**TIME_BITS) - 1
 
+  DEFAULT_RNG = SecureRandom
+
   # Return a new unique value, using the default random number
   # generator
   def self.value
     new.value
   end
 
-  # Create a new unique value generator.
-  # +prng+ defaults to +Random::DEFAULT+. An object that implements
-  # +:rand+ returning a random integer between 0 and the value provided
-  # as the first argument.
-  def initialize(prng = Random::DEFAULT)
-    @prng = prng
+  # Create a new unique value generator.  +rng+ defaults to
+  # +SecureRandom+. An object that implements +:random_number+
+  # returning a random integer >= 0 and less than value provided as
+  # the first argument.
+  def initialize(rng = DEFAULT_RNG)
+    @rng = rng
   end
 
   # Return the unique 72-bit value
@@ -33,7 +37,7 @@ class Onliest
   private
 
   def some_random_bits
-    @prng.rand(RANDOM_BITMASK)
+    @rng.random_number(RANDOM_BITMASK + 1)
   end
 
   def some_time_bits
