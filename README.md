@@ -118,4 +118,5 @@ Changes
 =======
 
 0.10 - Introduces the Snowflake scheme and facilities for custom uniqueness schemes.
+
 0.02 - Initial release.
