@@ -24,23 +24,28 @@ class Onliest
   # +SecureRandom+. An object that implements +:random_number+
   # returning a random integer >= 0 and less than value provided as
   # the first argument.
-  def initialize(rng = DEFAULT_RNG)
-    @rng = rng
+  def initialize(rng: DEFAULT_RNG, fields: false)
+    @fields = fields ? fields : default_fields(rng)
   end
 
-  # Return the unique 72-bit value
+  # Construct and return the unique value
   def value
-    (some_time_bits << RANDOM_BITS) +
-      some_random_bits
+    total_bits = 0
+    total_value = 0
+    @fields.reverse.each do |field|
+      bits = field.fetch(:bits)
+      field_value = Integer(field.fetch(:generator).call) & ((2**bits) - 1)
+      total_value += (field_value << total_bits)
+      total_bits += bits
+    end
+    total_value
   end
 
   private
 
-  def some_random_bits
-    @rng.random_number(RANDOM_BITMASK + 1)
-  end
-
-  def some_time_bits
-    Time.now.to_i & TIME_BITMASK
+  def default_fields(rng)
+    [{ bits: TIME_BITS, generator: -> { Time.now.to_i } },
+     { bits: RANDOM_BITS,
+       generator: -> { rng.random_number(RANDOM_BITMASK + 1) } }]
   end
 end

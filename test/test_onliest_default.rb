@@ -1,8 +1,9 @@
-require 'minitest/autorun'
-
+require_relative './test_setup'
 require 'onliest'
 
-class OnliestTest < Minitest::Unit::TestCase
+# Tests for the dkjefault scheme
+
+class OnliestDefaultTest < TestCase
   def test_generates_a_number
     assert_kind_of(Integer, Onliest.value)
   end
@@ -16,31 +17,25 @@ class OnliestTest < Minitest::Unit::TestCase
     fake_prng.expect(:random_number, value, [2**47])
   end
 
-  def at(value)
-    Time.stub(:now, Time.at(value)) do
-      yield
-    end
-  end
-
   def test_with_a_time_and_a_prng
     at((2**25) + 1) do
       random_value = 2
-      gen = Onliest.new(fake_prng(random_value))
-      assert_equal(gen.value, (1 << 47) + random_value)
+      gen = Onliest.new(rng: fake_prng(random_value))
+      assert_equal((1 << 47) + random_value, gen.value)
     end
   end
 
   def test_the_littlest_onliest
     at(0) do
-      gen = Onliest.new(fake_prng(0))
+      gen = Onliest.new(rng: fake_prng(0))
       assert_equal(gen.value, 0)
     end
   end
 
   def test_the_largest_onliest
     at(2**25 - 1) do
-      gen = Onliest.new(fake_prng(2**47 - 1))
-      assert_equal(gen.value, 2**72 - 1)
+      gen = Onliest.new(rng: fake_prng(2**47 - 1))
+      assert_equal(2**72 - 1, gen.value)
     end
   end
 end
