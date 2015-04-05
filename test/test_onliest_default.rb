@@ -1,8 +1,9 @@
-require 'minitest/autorun'
-
+require_relative './test_setup'
 require 'onliest'
 
-class OnliestTest < Minitest::Unit::TestCase
+# Tests for the dkjefault scheme
+
+class OnliestDefaultTest < TestCase
   def test_generates_a_number
     assert_kind_of(Integer, Onliest.value)
   end
@@ -14,12 +15,6 @@ class OnliestTest < Minitest::Unit::TestCase
   def fake_prng(value = 1)
     fake_prng = Minitest::Mock.new
     fake_prng.expect(:random_number, value, [2**47])
-  end
-
-  def at(value)
-    Time.stub(:now, Time.at(value)) do
-      yield
-    end
   end
 
   def test_with_a_time_and_a_prng

@@ -25,26 +25,27 @@ class Onliest
   # returning a random integer >= 0 and less than value provided as
   # the first argument.
   def initialize(rng: DEFAULT_RNG, fields: false)
-    @fields = default_fields(rng) unless fields
+    @fields = fields ? fields : default_fields(rng)
   end
-  
-  # Return the unique 72-bit value
+
+  # Construct and return the unique value
   def value
     total_bits = 0
     total_value = 0
-    @fields.reverse.each do | field |
+    @fields.reverse.each do |field|
       bits = field.fetch(:bits)
-      field_value = field.fetch(:generator).call & ((2 ** bits) - 1)
+      field_value = Integer(field.fetch(:generator).call) & ((2**bits) - 1)
       total_value += (field_value << total_bits)
       total_bits += bits
     end
-    return total_value
+    total_value
   end
 
   private
 
   def default_fields(rng)
-    [{ bits: TIME_BITS, generator: ->{ Time.now.to_i } },
-     { bits: RANDOM_BITS, generator: ->{ rng.random_number(RANDOM_BITMASK + 1) } }]
+    [{ bits: TIME_BITS, generator: -> { Time.now.to_i } },
+     { bits: RANDOM_BITS,
+       generator: -> { rng.random_number(RANDOM_BITMASK + 1) } }]
   end
 end
