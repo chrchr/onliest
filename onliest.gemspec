@@ -12,6 +12,6 @@ Gem::Specification.new do |s|
   s.executables << 'onliest'
   s.homepage    = 'https://github.com/chrchr/onliest'
   s.license       = 'MIT'
-  s.add_development_dependency 'rake'
-  s.add_development_dependency 'minitest'
+  s.add_development_dependency 'rake','~>10'
+  s.add_development_dependency 'minitest','~>5'
 end

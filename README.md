@@ -60,7 +60,7 @@ Snowflake: Compact, Deterministic Uniqueness
 
 At the cost of some coordination, the Snowflake scheme from Twitter
 (https://blog.twitter.com/2010/announcing-snowflake) provides
-semi-ordered unique values in 64 bits. The values include 41-bits of
+semi-ordered unique values in 64 bits. The values include 41 bits of
 milliseconds since an epoch, a 10-bit worker number, and a 12-bit
 sequence value. The worker number must be provided by the application,
 and it is assumed that each Snowflake generator instance will have a
