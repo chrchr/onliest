@@ -28,8 +28,6 @@ class Onliest::Snowflake < Onliest
 
   def time
     while (t = time_now) < @older_time
-      #puts @older_time
-      #puts t
       sleep((@older_time - t) / 1000)
     end
     @older_time = t
